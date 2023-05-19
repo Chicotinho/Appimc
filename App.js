@@ -1,7 +1,49 @@
 import { StatusBar } from 'react';
+import {useState} from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity} from 'react-native';
 
-export default function App() {
+export default function App(){
+	const [peso, setPeso] = useState();
+	const [altura, setAltura] = useState();
+	const [resultado, setResultado] = useState(0);
+	const [texto, setTexto] = useState("");
+
+	function calcular(){
+		let resultado = peso / (altura * altura);
+		let texto  = "";
+		
+		if(resultado <= 16.9){
+			texto = ("Muito abaixo do Peso");
+			setTexto(texto);
+		}else if(resultado <= 18.4){
+			texto = ("Abaixo do Peso");
+			setTexto(texto);
+		}else if(resultado <= 24.9){
+			texto = ("Peso Normal");
+			setTexto(texto);
+		}else if(resultado <= 29.9){
+			texto = ("Acima do Peso");
+			setTexto(texto);
+		}else if(resultado <= 34.9){
+			texto = ("Obesidade Grau I");
+			setTexto(texto);
+		}else if(resultado <= 40){
+			texto = ("Obesidade Grau II");
+			setTexto(texto);
+		}else if(resultado > 40){
+			texto = ("Obesidade Grau III");
+			setTexto(texto);
+		}
+		setResultado(resultado.toFixed(2));
+	}
+	
+	function limpar(){
+		setResultado("");
+		setAltura("");
+		setPeso("");
+	}
+	
+
   return (
     <View style={styles.container}>
 		<View style={styles.titulo}>
@@ -14,21 +56,31 @@ export default function App() {
 		  
 		<View style={styles.bloco}>
 			<Text style={styles.Label}>Peso:</Text>
-			<TextInput style={styles.txtInput} placeholder="Insirar seu Peso" keyboardType="numeric"/>
+			<TextInput style={styles.txtInput} placeholder="Insirar seu Peso" keyboardType="numeric" value={peso} onChangeText={(value) => setPeso(value)}/>
 			
 			<Text style={styles.Label}>Altura:</Text>
-			<TextInput style={styles.txtInput} placeholder="Insirar seu Peso" keyboardType="numeric"/>
+			<TextInput style={styles.txtInput} placeholder="Insirar sua Altura" keyboardType="numeric" value={altura} onChangeText={(value) => setAltura(value)}/>
 		</View>
 		  
 		<View style={styles.bloco1}>
-			<TouchableOpacity style={styles.button} >
-        		<Text>Calcular</Text>
+			<TouchableOpacity style={styles.button} onPress={calcular} >
+        		<Text style={styles.letra}>Calcular</Text>
       		</TouchableOpacity>
 			
-			<TouchableOpacity style={styles.button} >
-        		<Text>Calcular</Text>
+			<TouchableOpacity style={styles.button} onPress={limpar}>
+        		<Text style={styles.letra}>Limpar</Text>
       		</TouchableOpacity>
 		</View>
+		 
+		<View style={styles.bloco}>
+			<Text style={styles.Label}>
+				Resultado: {resultado}
+			</Text>
+			<Text style={styles.Label}>
+			    {texto}
+			</Text>
+		</View> 
+		  
     </View>
   );
 }
@@ -73,7 +125,7 @@ const styles = StyleSheet.create({
 		marginBottom: 15,
 	},
 	Label: {
-		backgroundColor:'#fff',
+		backgroundColor:'#A3698E',
 		marginTop: 10,
 		marginBotton: 10,
 		width: 300,
@@ -90,13 +142,17 @@ const styles = StyleSheet.create({
 		marginTop: 10,
 		marginLeft: 10,
 		marginBottom: 15,
-		height: "8vw",
+		height: 50,
 		width: 150,
 		borderRadius:5,
 		borderWidth:1,
+		
 	},
 	fundobt:{
 	backgroundColor: '#E87D76'
    
-}
+	},
+	letra:{
+		fontSize:20,
+	}
 });
